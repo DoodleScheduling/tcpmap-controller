@@ -1,0 +1,57 @@
+{{- if .Values.clusterRBAC.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "k8stcpmap-controller.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "k8stcpmap-controller.chart" . }}
+  annotations:
+    {{- toYaml .Values.annotations | nindent 4 }}
+rules:
+- apiGroups:
+  - ""
+  resources:
+    - services
+    - configmaps
+  verbs:
+    - get
+    - patch
+    - update
+    - list
+    - watch
+- apiGroups:
+  - "networking.infra.doodle.com"
+  resources:
+  - tcpingressmappings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - "networking.infra.doodle.com"
+  resources:
+  - tcpingressmappings/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+{{- end }}

@@ -1,0 +1,28 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - proxy.infra.doodle.com
+  resources:
+  - TCPIngressMappings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - proxy.infra.doodle.com
+  resources:
+  - TCPIngressMappings/status
+  verbs:
+  - get
+  - patch
+  - update

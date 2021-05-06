@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: 0.0.0
+description: Automated tcp mapping for the nginx ingress controller
+home: https://github.com/DoodleScheduling/k8stcpmap-controller
+keywords:
+- kubernetes-controller
+- nginx-ingress
+name: k8stcpmap-controller
+sources:
+- https://github.com/DoodleScheduling/k8stcpmap-controller
+version: 0.0.0

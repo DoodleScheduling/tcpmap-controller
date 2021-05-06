@@ -1,0 +1,7 @@
+domain: doodle.com
+repo: github.com/DoodleScheduling/k8stcpmap-controller
+resources:
+- group: networking.infra.doodle.com
+  kind: TCPIngressMapping
+  version: v1beta1
+version: "2"
