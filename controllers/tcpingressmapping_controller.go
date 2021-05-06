@@ -110,8 +110,8 @@ func (r *TCPIngressMappingReconciler) requestsForServiceChange(o client.Object) 
 	return reqs
 }
 
-// +kubebuilder:rbac:groups=proxy.infra.doodle.com,resources=TCPIngressMappings,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=proxy.infra.doodle.com,resources=TCPIngressMappings/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=TCPIngressMappings,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=TCPIngressMappings/status,verbs=get;update;patch
 
 // Reconcile TCPIngressMappings
 func (r *TCPIngressMappingReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {

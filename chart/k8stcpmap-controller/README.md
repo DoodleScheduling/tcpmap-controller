@@ -1,4 +1,4 @@
-# k8sproxy controller helm chart
+# k8stcpmap controller helm chart
 
 Installs the [k8stcpmap-controller](https://github.com/DoodleScheduling/k8stcpmap-controller).
 
