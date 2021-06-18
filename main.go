@@ -75,8 +75,8 @@ func main() {
 		"Specify a different leader election namespace. It will use the one where the controller is deployed by default.")
 	flag.StringVar(&namespaces, "namespaces", "",
 		"The controller listens by default for all namespaces. This may be limited to a comma delimted list of dedicated namespaces.")
-	flag.IntVar(&concurrent, "concurrent", 4,
-		"The number of concurrent reconcile workers. By default this is 4.")
+	flag.IntVar(&concurrent, "concurrent", 1,
+		"The number of concurrent reconcile workers. By default this is 1.")
 
 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
