@@ -7,7 +7,7 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
-  - proxy.infra.doodle.com
+  - networking.infra.doodle.com
   resources:
   - TCPIngressMappings
   verbs:
@@ -19,7 +19,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - proxy.infra.doodle.com
+  - networking.infra.doodle.com
   resources:
   - TCPIngressMappings/status
   verbs:

@@ -81,6 +81,7 @@ const (
 	FailedRegisterFrontendPortReason  = "FailedRegisterFrontendPort"
 	FailedRegisterConfigMapPortReason = "FailedRegisterConfigMapPort"
 	BackendPortNotFoundReason         = "BackendPortNotFound"
+	NoPortElectedReason               = "NoPortElected"
 	PortReadyReason                   = "PortReady"
 )
 
