@@ -35,3 +35,5 @@ Available env variables:
 | `LEADER_ELECTION_NAMESPACE` | Change the leader election namespace. This is by default the same where the controller is deployed. | `` |
 | `NAMESPACES` | The controller listens by default for all namespaces. This may be limited to a comma delimted list of dedicated namespaces. | `` |
 | `CONCURRENT` | The number of concurrent reconcile workers.  | `4` |
+| `TCP_CONFIG_MAP` | The default tcp configmap | |
+| `FRONTEND_SERVICE` | The default frontend service | |
