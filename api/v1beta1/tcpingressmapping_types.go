@@ -28,10 +28,10 @@ type TCPIngressMappingSpec struct {
 	BackendService BackendService `json:"backendService"`
 
 	// +optional
-	FrontendService *FrontendService `json:"frontendService"`
+	FrontendService *FrontendService `json:"frontendService,omitempty"`
 
 	// +optional
-	TCPConfigMap *TCPConfigMap `json:"tcpConfigMap"`
+	TCPConfigMap *TCPConfigMap `json:"tcpConfigMap,omitempty"`
 }
 
 type TCPConfigMap struct {
