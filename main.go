@@ -68,7 +68,7 @@ func main() {
 	flag.StringVar(&httpAddr, "http-addr", ":8080", "The address of http server binding to.")
 	flag.StringVar(&tcpConfigMap, "tcp-services-configmap", "", "Set the default tcp configmap (https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/). Might be set in the resource itself.")
 	flag.StringVar(&frontendService, "frontend-service", "", "Set the default nginx controller service. Might be set in the resource itself")
-	flag.BoolVar(&enableLeaderElection, "enable-leader-election", true,
+	flag.BoolVar(&enableLeaderElection, "enable-leader-election", false,
 		"Enable leader election for controller manager. "+
 			"Enabling this will ensure there is only one active controller manager.")
 	flag.StringVar(&leaderElectionNamespace, "leader-election-namespace", "",
