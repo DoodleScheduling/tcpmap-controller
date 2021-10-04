@@ -31,7 +31,7 @@ Available env variables:
 |-------|-------------| --------|
 | `METRICS_ADDR` | The address of the metric endpoint binds to. | `:9556` |
 | `PROBE_ADDR` | The address of the probe endpoints binds to. | `:9557` |
-| `ENABLE_LEADER_ELECTION` | Enable leader election for controller manager. | `true` |
+| `ENABLE_LEADER_ELECTION` | Enable leader election for controller manager. | `false` |
 | `LEADER_ELECTION_NAMESPACE` | Change the leader election namespace. This is by default the same where the controller is deployed. | `` |
 | `NAMESPACES` | The controller listens by default for all namespaces. This may be limited to a comma delimted list of dedicated namespaces. | `` |
 | `CONCURRENT` | The number of concurrent reconcile workers.  | `4` |
