@@ -39,7 +39,7 @@ type TCPConfigMap struct {
 	Name string `json:"name"`
 
 	// +optional
-	Namespace string `json:"namespace"`
+	Namespace string `json:"namespace,omitempty"`
 }
 
 type BackendService struct {
@@ -50,7 +50,7 @@ type BackendService struct {
 	Port intstr.IntOrString `json:"port"`
 
 	// +optional
-	Namespace string `json:"namespace"`
+	Namespace string `json:"namespace,omitempty"`
 }
 
 type FrontendService struct {
@@ -61,7 +61,7 @@ type FrontendService struct {
 	Port string `json:"port"`
 
 	// +optional
-	Namespace string `json:"namespace"`
+	Namespace string `json:"namespace,omitempty"`
 }
 
 // TCPIngressMappingStatus defines the observed state of TCPIngressMapping
@@ -69,8 +69,9 @@ type TCPIngressMappingStatus struct {
 	// Conditions holds the conditions for the VaultBinding.
 	// +optional
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
+
 	// +optional
-	ElectedPort int32 `json:"electedPort"`
+	ElectedPort int32 `json:"electedPort,omitempty"`
 }
 
 const (

@@ -41,6 +41,11 @@ import (
 	v1beta1 "github.com/DoodleScheduling/k8stcpmap-controller/api/v1beta1"
 )
 
+// +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=tcpingressmappings,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=tcpingressmappings/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch
+// +kubebuilder:rbac:groups="",resources=events,verbs=create;patch
+
 const (
 	serviceIndex = ".metadata.service"
 	finalizer    = "finalizer.infra.doodle.com"
@@ -110,9 +115,6 @@ func (r *TCPIngressMappingReconciler) requestsForServiceChange(o client.Object) 
 
 	return reqs
 }
-
-// +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=TCPIngressMappings,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=TCPIngressMappings/status,verbs=get;update;patch
 
 // Reconcile TCPIngressMappings
 func (r *TCPIngressMappingReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
@@ -428,7 +430,7 @@ func (r *TCPIngressMappingReconciler) getConfigMap(ctx context.Context, tcpmap v
 		if r.TCPConfigMap == "" {
 			name = tcpmap.Spec.TCPConfigMap.Name
 			if tcpmap.Spec.TCPConfigMap.Namespace != "" {
-				ns = tcpmap.Spec.BackendService.Namespace
+				ns = tcpmap.Spec.TCPConfigMap.Namespace
 			}
 		} else {
 			parts := strings.Split(r.TCPConfigMap, "/")
