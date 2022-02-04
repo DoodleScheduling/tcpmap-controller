@@ -166,6 +166,7 @@ func (r *TCPIngressMappingReconciler) Reconcile(ctx context.Context, req ctrl.Re
 	}
 
 	tcpmap, result, reconcileErr := r.reconcile(ctx, tcpmap, logger)
+	tcpmap.Status.ObservedGeneration = tcpmap.GetGeneration()
 
 	// Update status after reconciliation.
 	if err = r.patchStatus(ctx, &tcpmap); err != nil {
