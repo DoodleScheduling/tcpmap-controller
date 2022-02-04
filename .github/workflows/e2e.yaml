@@ -62,7 +62,7 @@ jobs:
           helm upgrade --wait -i ingress-nginx ingress-nginx/ingress-nginx \
           --version $NGINX_INGRESS_VER \
           --namespace ingress-nginx \
-          --set controller.extraArgs.tcp-services-configmap="\$(POD_NAMESPACE)/tcp-services-configmap"
+          --set controller.extraArgs.tcp-services-configmap="\$(POD_NAMESPACE)/tcp-services-configmap" \
           --set controller.service.type=ClusterIP
       - name: Setup podinfo
         env:
