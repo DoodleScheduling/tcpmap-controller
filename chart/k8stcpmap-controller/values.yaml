@@ -8,8 +8,8 @@ fullnameOverride: ""
 
 image:
   pullPolicy: IfNotPresent
-  repository: nexus.doodle.com:5000/devops/k8stcpmap-controller
-  tag: 0.0.0
+  repository: ghcr.io/doodlescheduling/k8stcpmap-controller
+  tag:
 
 imagePullSecrets: []
 
@@ -88,11 +88,6 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 10000
 
-service:
-  labels: {}
-  annotations: {}
-  type: ClusterIP
-
 serviceAccount:
   create: true
   # If create is true and name is not set, then a name is generated using the
@@ -109,8 +104,8 @@ clusterRBAC:
 podSecurityPolicy:
   enabled: true
 
-# Prometheus operator ServiceMonitor
-serviceMonitor:
+# Prometheus operator PodMonitor
+podMonitor:
   enabled: true
   interval: 30s
   scrapeTimeout: 10s
