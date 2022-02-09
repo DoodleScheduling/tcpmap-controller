@@ -78,9 +78,10 @@ jobs:
           kubectl -n podinfo apply -f ./config/testdata
           kubectl -n podinfo wait tcpingressmappings/backend-podinfo --for=condition=Ready --timeout=1m
           electedPort=$(kubectl -n podinfo get tcpingressmappings/backend-podinfo -o jsonpath='{.status.electedPort}')
+          echo "bound port $electedPort"
           kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 8080:$electedPort &>/dev/null &
           sleep 2
-          curl --fail http://localhost:8080
+          curl -vvv --fail http://localhost:8080
       - name: Logs
         run: |
           kubectl -n k8stcpmap-system logs deploy/k8stcpmap-controller
