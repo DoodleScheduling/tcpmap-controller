@@ -81,7 +81,7 @@ jobs:
           electedPort=$(kubectl -n podinfo get tcpingressmappings/backend-podinfo -o jsonpath='{.status.electedPort}')
           echo "bound port $electedPort"
           kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 8080:$electedPort &>/dev/null &
-          sleep 2
+          sleep 10
           curl --haproxy-protocol -vvv --fail http://localhost:8080
       - name: Logs
         run: |
