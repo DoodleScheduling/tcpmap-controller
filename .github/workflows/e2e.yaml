@@ -81,7 +81,7 @@ jobs:
           echo "bound port $electedPort"
           kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 8080:$electedPort &>/dev/null &
           sleep 2
-          curl --haproxy-protocol -vvv --fail http://localhost:8080
+          curl --haproxy-protocol -4 -vvv --fail http://localhost:8080
       - name: Logs
         run: |
           kubectl -n k8stcpmap-system logs deploy/k8stcpmap-controller
