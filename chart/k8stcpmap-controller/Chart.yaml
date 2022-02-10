@@ -2,6 +2,9 @@ apiVersion: v2
 appVersion: v0.1.0
 description: Automated tcp port mapping for the nginx ingress controller
 home: https://github.com/DoodleScheduling/k8stcpmap-controller
+maintainers:
+- name: devops
+  email: devops@doodle.com
 keywords:
 - kubernetes-controller
 - nginx-ingress
