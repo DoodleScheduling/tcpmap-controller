@@ -47,9 +47,6 @@ spec:
     namespace: ingress-nginx
 ```
 
-![graph](https://github.com/DoodleScheduling/k8stcpmap-controller/blob/master/docs/graph.jpg?raw=true)
-
-
 ## Helm chart
 
 Please see [chart/k8stcpmap-controller](https://github.com/DoodleScheduling/k8stcpmap-controller) for the helm chart docs.
