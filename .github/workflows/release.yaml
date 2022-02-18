@@ -72,7 +72,7 @@ jobs:
           mkdir -p config/release
           kustomize build ./config/crd > ./config/release/${{ env.CONTROLLER }}.crds.yaml
           kustomize build ./config/manager > ./config/release/${{ env.CONTROLLER }}.deployment.yaml
-          echo '[CHANGELOG](https://github.com/DoodleScheduling/${{ env.CONTROLLER }}/blob/main/CHANGELOG.md)' > ./config/release/notes.md
+          echo '[CHANGELOG](https://github.com/DoodleScheduling/${{ env.CONTROLLER }}/blob/master/CHANGELOG.md)' > ./config/release/notes.md
       - uses: anchore/sbom-action/download-syft@v0
       - name: Create release and SBOM
         if: startsWith(github.ref, 'refs/tags/v')
