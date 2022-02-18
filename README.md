@@ -3,12 +3,32 @@
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4787/badge)](https://bestpractices.coreinfrastructure.org/projects/4787)
 [![e2e](https://github.com/DoodleScheduling/k8stcpmap-controller/workflows/e2e/badge.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/actions)
 [![report](https://goreportcard.com/badge/github.com/DoodleScheduling/k8stcpmap-controller)](https://goreportcard.com/report/github.com/DoodleScheduling/k8stcpmap-controller)
-[![license](https://img.shields.io/github/license/DoodleScheduling/k8stcpmap-controller.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/DoodleScheduling/k8stcpmap-controller.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/blob/master/LICENSE)
 [![release](https://img.shields.io/github/release/DoodleScheduling/k8stcpmap-controller/all.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/releases)
 
-The k8stcpmap-controller can automatically bind kubernetes services to the nginx ingress tcp proxy.
-Using a CRD called TCPIngressMapping you can define which service and what port should be proxied through the nginx ingress controller.
-The controller automatically elects a free port which will be exposed on nginx.
+The k8stcpmap-controller can automatically bind kubernetes services to the nginx ingress controller tcp proxy.
+Using a resource named TCPIngressMapping you can define which service and what port should be proxied through the nginx ingress controller.
+The controller automatically elects a free port which will be exposed on nginx as well as the nginx front service.
+
+## Requirements
+
+You need an nginx ingress controller which loads a configmap with port mappings `--tcp-services-configmap`.
+See https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services.
+You can deploy an empty configmap.
+
+Example installation of an ingress controller supporting tcp port mapping:
+```
+kubectl -n ingress-nginx create cm tcp-services-configmap
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm upgrade --wait -i ingress-nginx ingress-nginx/ingress-nginx \
+  --namespace ingress-nginx \
+  --set controller.extraArgs.tcp-services-configmap="\$(POD_NAMESPACE)/tcp-services-configmap"
+```
+
+## Use cases
+If you have tcp services in your cluster which you need to expose via a single entrypoint.
+There is no requirement to port-forward through the api server this way.
+
 
 ## Example TCPIngressMapping
 
@@ -27,7 +47,7 @@ status:
 ```
 
 Its also possible to define for which nginx proxy you want to deploy the proxied port.
-This is useful if you don't want to set a default nginx ingress and have multiple nginx ingresses.
+This is useful if you don't want to set a default nginx ingress (See env variables) and have multiple nginx ingresses.
 
 ```yaml
 apiVersion: networking.infra.doodle.com/v1beta1
