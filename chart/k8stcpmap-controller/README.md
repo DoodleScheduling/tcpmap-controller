@@ -7,6 +7,7 @@ Installs the [k8stcpmap-controller](https://github.com/DoodleScheduling/k8stcpma
 To install the chart with the release name `k8stcpmap-controller`:
 
 ```console
+helm repository add k8stcpmap-controller
 helm upgrade --install k8stcpmap-controller k8stcpmap-controller/k8stcpmap-controller
 ```
 
