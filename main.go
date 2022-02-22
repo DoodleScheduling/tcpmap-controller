@@ -57,7 +57,7 @@ var (
 	enableLeaderElection    = false
 	leaderElectionNamespace string
 	namespaces              = ""
-	concurrent              = 4
+	concurrent              = 1
 	tcpConfigMap            = ""
 	frontendService         = ""
 )

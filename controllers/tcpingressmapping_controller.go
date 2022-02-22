@@ -24,7 +24,6 @@ import (
 	"strings"
 
 	"github.com/go-logr/logr"
-	"github.com/prometheus/common/log"
 	v1 "k8s.io/api/core/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -43,6 +42,8 @@ import (
 
 // +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=tcpingressmappings,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=tcpingressmappings/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups="",resources=configmaps,verbs=get;list;watch;create;update;patch
+// +kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch
 // +kubebuilder:rbac:groups="",resources=secrets,verbs=get;list;watch
 // +kubebuilder:rbac:groups="",resources=events,verbs=create;patch
 
@@ -166,10 +167,11 @@ func (r *TCPIngressMappingReconciler) Reconcile(ctx context.Context, req ctrl.Re
 	}
 
 	tcpmap, result, reconcileErr := r.reconcile(ctx, tcpmap, logger)
+	tcpmap.Status.ObservedGeneration = tcpmap.GetGeneration()
 
 	// Update status after reconciliation.
 	if err = r.patchStatus(ctx, &tcpmap); err != nil {
-		log.Error(err, "unable to update status after reconciliation")
+		logger.Error(err, "unable to update status after reconciliation")
 		return ctrl.Result{Requeue: true}, err
 	}
 
