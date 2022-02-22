@@ -1,6 +1,6 @@
 # k8stcpmap-controller
 
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4787/badge)](https://bestpractices.coreinfrastructure.org/projects/4787)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5637/badge)](https://bestpractices.coreinfrastructure.org/projects/5637)
 [![e2e](https://github.com/DoodleScheduling/k8stcpmap-controller/workflows/e2e/badge.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/actions)
 [![report](https://goreportcard.com/badge/github.com/DoodleScheduling/k8stcpmap-controller)](https://goreportcard.com/report/github.com/DoodleScheduling/k8stcpmap-controller)
 [![license](https://img.shields.io/github/license/DoodleScheduling/k8stcpmap-controller.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/blob/master/LICENSE)
@@ -67,9 +67,16 @@ spec:
     namespace: ingress-nginx
 ```
 
-## Helm chart
+## Installation
 
-Please see [chart/k8stcpmap-controller](https://github.com/DoodleScheduling/k8stcpmap-controller) for the helm chart docs.
+### Helm
+
+Please see [chart/k8stcpmap-controller](https://github.com/DoodleScheduling/k8stcpmap-controller/tree/master/chart/k8stcpmap-controller) for the helm chart docs.
+
+### Manifests/kustomize
+
+Alternatively you may get the bundled manifests in each release to deploy it using kustomize or use them directly.
+
 
 ## Configure the controller
 
