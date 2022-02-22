@@ -51,7 +51,6 @@ func init() {
 }
 
 var (
-	httpAddr                = ":8080"
 	metricsAddr             = ":9556"
 	probesAddr              = ":9557"
 	enableLeaderElection    = false
@@ -65,7 +64,6 @@ var (
 func main() {
 	flag.StringVar(&metricsAddr, "metrics-addr", ":9556", "The address of the metric endpoint binds to.")
 	flag.StringVar(&probesAddr, "probe-addr", ":9557", "The address of the probe endpoints bind to.")
-	flag.StringVar(&httpAddr, "http-addr", ":8080", "The address of http server binding to.")
 	flag.StringVar(&tcpConfigMap, "tcp-services-configmap", "", "Set the default tcp configmap (https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/). Might be set in the resource itself.")
 	flag.StringVar(&frontendService, "frontend-service", "", "Set the default nginx controller service. Might be set in the resource itself")
 	flag.BoolVar(&enableLeaderElection, "enable-leader-election", false,
