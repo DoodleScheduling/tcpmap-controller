@@ -1,17 +1,14 @@
 apiVersion: v2
-appVersion: v0.2.0
-description: Suspend and resume kubernetes namespaces
-home: https://github.com/DoodleScheduling/k8stcpmap
+appVersion: v0.1.0
+description: Automated tcp port mapping for the nginx ingress controller
+home: https://github.com/DoodleScheduling/k8stcpmap-controller
 maintainers:
 - name: devops
   email: devops@doodle.com
 keywords:
 - kubernetes-controller
-- admission-controller
-- pause
-- resume
-- suspend
-name: k8stcpmap
+- nginx-ingress
+name: k8stcpmap-controller
 sources:
-- https://github.com/DoodleScheduling/k8stcpmap
+- https://github.com/DoodleScheduling/k8stcpmap-controller
 version: 0.2.0
