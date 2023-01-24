@@ -1,22 +1,15 @@
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: {{ template "k8stcpmap-controller.fullname" . }}
+  name: {{ template "k8stcpmap.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}
+    app.kubernetes.io/name: {{ include "k8stcpmap.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "k8stcpmap-controller.chart" . }}
+    helm.sh/chart: {{ include "k8stcpmap.chart" . }}
   annotations:
     {{- toYaml .Values.annotations | nindent 4 }}
 rules:
-{{- if .Values.podSecurityPolicy.enabled }}
-  - apiGroups: ['extensions']
-    resources: ['podsecuritypolicies']
-    verbs:     ['use']
-    resourceNames:
-    - {{ template "k8stcpmap-controller.fullname" . }}
-{{- end }}
   # leader election
   - apiGroups:
       - ""
