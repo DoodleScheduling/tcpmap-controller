@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "k8stcpmap.name" -}}
+{{- define "k8stcpmap-controller.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "k8stcpmap.fullname" -}}
+{{- define "k8stcpmap-controller.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,25 +27,25 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "k8stcpmap.chart" -}}
+{{- define "k8stcpmap-controller.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "k8stcpmap.serviceAccountName" -}}
+{{- define "k8stcpmap-controller.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "k8stcpmap.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "k8stcpmap-controller.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
-{{- define "k8stcpmap.certManager.selfsignedIssuerName" -}}	
-{{- include "k8stcpmap.fullname" . }}-selfsigned-issuer	
+{{- define "k8stcpmap-controller.certManager.selfsignedIssuerName" -}}	
+{{- include "k8stcpmap-controller.fullname" . }}-selfsigned-issuer	
 {{- end }}	
 
-{{- define "k8stcpmap.certManager.servingCertName" -}}	
-{{- include "k8stcpmap.fullname" . }}-serving-cert	
+{{- define "k8stcpmap-controller.certManager.servingCertName" -}}	
+{{- include "k8stcpmap-controller.fullname" . }}-serving-cert	
 {{- end }}

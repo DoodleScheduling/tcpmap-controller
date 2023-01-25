@@ -2,12 +2,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "k8stcpmap.fullname" . }}-metrics-reader
+  name: {{ include "k8stcpmap-controller.fullname" . }}-metrics-reader
   labels:
-    app.kubernetes.io/name: {{ include "k8stcpmap.name" . }}
+    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "k8stcpmap.chart" . }}
+    helm.sh/chart: {{ include "k8stcpmap-controller.chart" . }}
 rules:
 - nonResourceURLs:
   - "/metrics"
@@ -17,30 +17,30 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ include "k8stcpmap.fullname" . }}-proxy
+  name: {{ include "k8stcpmap-controller.fullname" . }}-proxy
   labels:
-    app.kubernetes.io/name: {{ include "k8stcpmap.name" . }}
+    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "k8stcpmap.chart" . }}
+    helm.sh/chart: {{ include "k8stcpmap-controller.chart" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "k8stcpmap.fullname" . }}-proxy
+  name: {{ include "k8stcpmap-controller.fullname" . }}-proxy
 subjects:
 - kind: ServiceAccount
-  name: {{ template "k8stcpmap.serviceAccountName" . }}
+  name: {{ template "k8stcpmap-controller.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "k8stcpmap.fullname" . }}-proxy
+  name: {{ include "k8stcpmap-controller.fullname" . }}-proxy
   labels:
-    app.kubernetes.io/name: {{ include "k8stcpmap.name" . }}
+    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "k8stcpmap.chart" . }}
+    helm.sh/chart: {{ include "k8stcpmap-controller.chart" . }}
 rules:
 - apiGroups:
   - authentication.k8s.io

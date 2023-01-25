@@ -111,7 +111,7 @@ uninstall: manifests kustomize ## Uninstall CRDs from the K8s cluster specified 
 
 .PHONY: deploy
 deploy: manifests kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
-	cd config/base/manager && $(KUSTOMIZE) edit set image ghcr.io/doodlescheduling/k8s-pause=${IMG}
+	cd config/base/manager && $(KUSTOMIZE) edit set image ghcr.io/doodlescheduling/k8stcpmap-controller=${IMG}
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
 .PHONY: undeploy

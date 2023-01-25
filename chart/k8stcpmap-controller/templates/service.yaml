@@ -2,12 +2,12 @@
 apiVersion: v1	
 kind: Service	
 metadata:	
-  name: {{ include "k8stcpmap.fullname" . }}	
+  name: {{ include "k8stcpmap-controller.fullname" . }}	
   labels:	
-    app.kubernetes.io/name: {{ include "k8stcpmap.name" . }}	
+    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}	
     app.kubernetes.io/instance: {{ .Release.Name }}	
     app.kubernetes.io/managed-by: {{ .Release.Service }}	
-    helm.sh/chart: {{ include "k8stcpmap.chart" . }}	
+    helm.sh/chart: {{ include "k8stcpmap-controller.chart" . }}	
   annotations:	
     {{- toYaml .Values.annotations | nindent 4 }}	
 spec:	
@@ -16,6 +16,6 @@ spec:
       protocol: TCP	
       targetPort: {{ .Values.webhook.port }}	
   selector:	
-    app.kubernetes.io/name: {{ include "k8stcpmap.name" . }}	
+    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}	
     app.kubernetes.io/instance: {{ .Release.Name }}	
 {{- end -}}
