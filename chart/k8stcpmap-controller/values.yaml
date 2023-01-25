@@ -8,20 +8,8 @@ fullnameOverride: ""
 
 image:
   pullPolicy: IfNotPresent
-  repository: ghcr.io/doodlescheduling/k8stcpmap
+  repository: ghcr.io/doodlescheduling/k8stcpmap-controller
   tag:
-
-certManager:
-  enabled: true
-
-webhook:
-  enabled: true
-  port: 9443
-  namespaceSelector: |
-    matchExpressions:
-    - key: control-plane
-      operator: NotIn
-      values: ["controller-manager"]
 
 imagePullSecrets: []
 
@@ -114,6 +102,11 @@ clusterRBAC:
   # By default the controller is granted full admin permsission on your cluster!
   # If you want to avoid this you may disable this flag and create individual bindings.
   fullAdmin: true
+
+# Creates a PodSecurityPolicy and the role/rolebinding
+# allowing the serviceaccount to use it
+podSecurityPolicy:
+  enabled: false
 
 # Prometheus operator PodMonitor
 podMonitor:

@@ -42,10 +42,24 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
-{{- define "k8stcpmap-controller.certManager.selfsignedIssuerName" -}}	
-{{- include "k8stcpmap-controller.fullname" . }}-selfsigned-issuer	
-{{- end }}	
+{{/*
+Determine secret name, can either be the self-created of an existing one
+*/}}
+{{- define "k8stcpmap-controller.secretName" -}}
+{{- if .Values.existingSecret.name -}}
+    {{- .Values.existingSecret.name -}}
+{{- else -}}
+    {{ include "k8stcpmap-controller.fullname" . }}
+{{- end -}}
+{{- end -}}
 
-{{- define "k8stcpmap-controller.certManager.servingCertName" -}}	
-{{- include "k8stcpmap-controller.fullname" . }}-serving-cert	
-{{- end }}
+{{/*
+Determine configmap name, can either be the self-created of an existing one
+*/}}
+{{- define "k8stcpmap-controller.configName" -}}
+{{- if .Values.existingConfig.name -}}
+    {{- .Values.existingConfig.name -}}
+{{- else -}}
+    {{ include "k8stcpmap-controller.fullname" . }}
+{{- end -}}
+{{- end -}}
