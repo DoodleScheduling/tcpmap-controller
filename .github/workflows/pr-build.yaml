@@ -47,7 +47,7 @@ jobs:
           fi
       - name: Build container image
         run: |
-          make docker-build IMG=test/k8stcpmap:latest BUILD_PLATFORMS=linux/amd64 \
+          make docker-build IMG=test/k8stcpmap-controller:latest BUILD_PLATFORMS=linux/amd64 \
             BUILD_ARGS="--cache-from=type=local,src=/tmp/.buildx-cache \
             --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max"
       - name: Setup Kubernetes
@@ -67,9 +67,9 @@ jobs:
           --set controller.extraArgs.tcp-services-configmap="\$(POD_NAMESPACE)/tcp-services-configmap" \
           --set controller.service.type=ClusterIP
       - name: Load test image
-        run: kind load docker-image test/k8stcpmap:latest
+        run: kind load docker-image test/k8stcpmap-controller:latest
       - name: Deploy controller
-        run: make deploy IMG=test/k8stcpmap:latest
+        run: make deploy IMG=test/k8stcpmap-controller:latest
       - name: Setup podinfo
         env:
           PODINFO_VER: ${{ '6.0.3' }}
@@ -99,3 +99,6 @@ jobs:
           kubectl -n k8sprom-patch-system get all
           kubectl -n k8sprom-patch-system logs deploy/k8stcpmap
           kubectl -n default get prometheuspatchrules -o yaml
+          kubectl -n podinfo get all
+          kubectl -n ingress-nginx get all
+          kubectl -n ingress-nginx get cm -o yaml
