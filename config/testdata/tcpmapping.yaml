@@ -5,7 +5,7 @@ metadata:
 spec:
   backendService:
     name: backend-podinfo
-    port: 9898
+    port: http
   frontendService:
     name: ingress-nginx-controller
     namespace: ingress-nginx
