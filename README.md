@@ -1,10 +1,11 @@
 # k8stcpmap-controller
 
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/5637/badge)](https://bestpractices.coreinfrastructure.org/projects/5637)
-[![e2e](https://github.com/DoodleScheduling/k8stcpmap-controller/workflows/e2e/badge.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/actions)
-[![report](https://goreportcard.com/badge/github.com/DoodleScheduling/k8stcpmap-controller)](https://goreportcard.com/report/github.com/DoodleScheduling/k8stcpmap-controller)
-[![license](https://img.shields.io/github/license/DoodleScheduling/k8stcpmap-controller.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/blob/master/LICENSE)
-[![release](https://img.shields.io/github/release/DoodleScheduling/k8stcpmap-controller/all.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/releases)
+[![release](https://img.shields.io/github/release/DoodleScheduling/k8sprom-patch-controller/all.svg)](https://github.com/DoodleScheduling/k8sprom-patch-controller/releases)
+[![release](https://github.com/doodlescheduling/k8sprom-patch-controller/actions/workflows/release.yaml/badge.svg)](https://github.com/doodlescheduling/k8sprom-patch-controller/actions/workflows/release.yaml)
+[![report](https://goreportcard.com/badge/github.com/DoodleScheduling/k8sprom-patch-controller)](https://goreportcard.com/report/github.com/DoodleScheduling/k8sprom-patch-controller)
+[![Coverage Status](https://coveralls.io/repos/github/DoodleScheduling/k8sprom-patch-controller/badge.svg?branch=master)](https://coveralls.io/github/DoodleScheduling/k8sprom-patch-controller?branch=master)
+[![license](https://img.shields.io/github/license/DoodleScheduling/k8sprom-patch-controller.svg)](https://github.com/DoodleScheduling/k8sprom-patch-controller/blob/master/LICENSE)
+
 
 The k8stcpmap-controller can automatically bind kubernetes services to the nginx ingress controller tcp proxy.
 Using a resource named TCPIngressMapping you can define which service and what port should be proxied through the nginx ingress controller.
