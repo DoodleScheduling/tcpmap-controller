@@ -63,4 +63,3 @@ Determine configmap name, can either be the self-created of an existing one
     {{ include "k8stcpmap-controller.fullname" . }}
 {{- end -}}
 {{- end -}}
-
