@@ -103,11 +103,6 @@ clusterRBAC:
   # If you want to avoid this you may disable this flag and create individual bindings.
   fullAdmin: true
 
-# Creates a PodSecurityPolicy and the role/rolebinding
-# allowing the serviceaccount to use it
-podSecurityPolicy:
-  enabled: false
-
 # Prometheus operator PodMonitor
 podMonitor:
   enabled: false
