@@ -1,0 +1,12 @@
+apiVersion: networking.infra.doodle.com/v1beta1
+kind: TCPIngressMapping
+metadata:
+  name: podinfo
+spec:
+  backendService:
+    name: podinfo
+    port: http
+  frontendService:
+    name: ingress-nginx-controller
+  tcpConfigMap:
+    name: tcp-services-configmap
