@@ -1,4 +1,3 @@
-
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -6,6 +5,8 @@
 *.so
 *.dylib
 bin
+manager
+config/**/charts
 
 # Test binary, build with `go test -c`
 *.test
