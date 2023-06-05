@@ -11,4 +11,4 @@ keywords:
 name: k8stcpmap-controller
 sources:
 - https://github.com/DoodleScheduling/k8stcpmap-controller
-version: 0.2.3
+version: 0.2.4
