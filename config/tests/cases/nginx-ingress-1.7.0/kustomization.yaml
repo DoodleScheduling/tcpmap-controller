@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: k8stcpmap-system
+
+resources: 
+- ../../../default
+- ../../base
+
+helmCharts:
+- repo: https://kubernetes.github.io/ingress-nginx
+  name: ingress-nginx
+  version: 4.6.0
+  releaseName: ingress-nginx
+  namespace: k8stcpmap-system
+  valuesInline:
+    controller:
+      extraArgs:
+        tcp-services-configmap: "$(POD_NAMESPACE)/tcp-services-configmap"
+      service:
+        type: ClusterIP
+- repo: https://stefanprodan.github.io/podinfo
+  name: podinfo
+  version: 6.3.5
+  releaseName: podinfo
+  namespace: k8stcpmap-system
+  valuesInline:
+    replicaCount: 2
+
+images:
+- name: ghcr.io/doodlescheduling/k8stcpmap-controller
+  newTag: latest
+  newName: k8stcpmap-controller
