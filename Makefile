@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= controller:latest
+IMG ?= k8stcpmap-controller:latest
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.23
 
@@ -71,7 +71,7 @@ test: manifests generate fmt vet tidy envtest ## Run tests.
 
 .PHONY: build
 build: generate fmt vet tidy ## Build manager binary.
-	go build -o bin/manager main.go
+	CGO_ENABLED=0 go build -o manager main.go
 
 .PHONY: run
 run: manifests generate fmt vet tidy ## Run a controller from your host.
@@ -88,7 +88,7 @@ api-docs: gen-crd-api-reference-docs
 	$(GEN_CRD_API_REFERENCE_DOCS) -api-dir=./api/v1beta1 -config=./hack/api-docs/config.json -template-dir=./hack/api-docs/template -out-file=./docs/api/v1beta1.md
 
 .PHONY: docker-build
-docker-build:
+docker-build: build
 	docker build -t ${IMG} .
 
 .PHONY: docker-push
@@ -118,6 +118,23 @@ deploy: manifests kustomize ## Deploy controller to the K8s cluster specified in
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config. Call with ignore-not-found=true to ignore resource not found errors during deletion.
 	$(KUSTOMIZE) build config/default | kubectl delete --ignore-not-found=$(ignore-not-found) -f -
 
+TEST_PROFILE=nginx-ingress-1.7.0
+CLUSTER=kind
+
+.PHONY: kind-test
+kind-test: docker-build ## Deploy including test
+	kustomize build config/base/crd | kubectl --context kind-${CLUSTER} apply -f -	
+	kind load docker-image ${IMG} --name ${CLUSTER}
+	kustomize build config/tests/cases/${TEST_PROFILE} --enable-helm | kubectl --context kind-${CLUSTER} apply -f -	
+	kubectl --context kind-${CLUSTER} -n k8stcpmap-system delete pods --all
+	kubectl --context kind-${CLUSTER} -n k8stcpmap-system wait --for=condition=Ready pods --all -l app.kubernetes.io/component!=admission-webhook --timeout=3m
+	electedPort=$$(kubectl -n k8stcpmap-system get tcpingressmappings/podinfo -o jsonpath='{.status.electedPort}'); \
+	kubectl -n k8stcpmap-system port-forward svc/ingress-nginx-controller 8099:$$electedPort & \
+	pid=$$!; \
+	sleep 10; \
+	curl --haproxy-protocol -v --fail http://localhost:8099; \
+	kill $$pid
+
 CONTROLLER_GEN = $(GOBIN)/controller-gen
 .PHONY: controller-gen
 controller-gen: ## Download controller-gen locally if necessary.
@@ -126,7 +143,7 @@ controller-gen: ## Download controller-gen locally if necessary.
 GOLANGCI_LINT = $(GOBIN)/golangci-lint
 .PHONY: golangci-lint
 golangci-lint: ## Download golint locally if necessary
-	$(call go-install-tool,$(GOLANGCI_LINT),github.com/golangci/golangci-lint/cmd/golangci-lint@v1.49.0)
+	$(call go-install-tool,$(GOLANGCI_LINT),github.com/golangci/golangci-lint/cmd/golangci-lint@v1.52.2)
 
 KUSTOMIZE = $(GOBIN)/kustomize
 .PHONY: kustomize

@@ -16,9 +16,9 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568 #v3.5.0
         with:
-          go-version: 1.19.x
+          go-version: 1.20.x
       - name: Restore Go cache
-        uses: actions/cache@4723a57e26efda3a62cbde1812113b730952852d #v3.2.2
+        uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v3.3.2
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -47,58 +47,21 @@ jobs:
           fi
       - name: Build container image
         run: |
-          make docker-build IMG=test/k8stcpmap-controller:latest BUILD_PLATFORMS=linux/amd64 \
-            BUILD_ARGS="--cache-from=type=local,src=/tmp/.buildx-cache \
-            --cache-to=type=local,dest=/tmp/.buildx-cache-new,mode=max"
+          make docker-build
       - name: Setup Kubernetes
         uses: engineerd/setup-kind@aa272fe2a7309878ffc2a81c56cfe3ef108ae7d0 #v0.5.0
         with:
           version: v0.17.0
-      - name: Setup nginx ingress
-        env:
-          NGINX_INGRESS_VER: ${{ '4.0.13' }}
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@6691bdeb1b0a3286fb7f70fd1423c10e81e5375f # v2.0.0
+      - name: Run test
         run: |
-          kubectl create ns ingress-nginx
-          kubectl -n ingress-nginx create cm tcp-services-configmap
-          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-          helm upgrade --wait -i ingress-nginx ingress-nginx/ingress-nginx \
-          --version $NGINX_INGRESS_VER \
-          --namespace ingress-nginx \
-          --set controller.extraArgs.tcp-services-configmap="\$(POD_NAMESPACE)/tcp-services-configmap" \
-          --set controller.service.type=ClusterIP
-      - name: Load test image
-        run: kind load docker-image test/k8stcpmap-controller:latest
-      - name: Deploy controller
-        run: make deploy IMG=test/k8stcpmap-controller:latest
-      - name: Setup podinfo
-        env:
-          PODINFO_VER: ${{ '6.0.3' }}
-        run: |
-          kubectl create ns podinfo
-          helm repo add podinfo https://stefanprodan.github.io/podinfo
-          helm upgrade --install --wait backend podinfo/podinfo \
-          --version $PODINFO_VER \
-          --namespace podinfo \
-          --set replicaCount=2
-      - name: Run tcpmap tests
-        run: |
-          kubectl -n podinfo apply -f ./config/testdata
-          kubectl -n podinfo wait tcpingressmappings/backend-podinfo --for=condition=Ready --timeout=1m
-          electedPort=$(kubectl -n podinfo get tcpingressmappings/backend-podinfo -o jsonpath='{.status.electedPort}')
-          echo "bound port $electedPort"
-          kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 8080:$electedPort &>/dev/null &
-          #We need to wait a bit til nginx reloaded the map
-          sleep 10
-          curl --haproxy-protocol -v --fail http://localhost:8080
+          make kind-test
       - name: Debug failure
         if: failure()
         run: |
           kubectl -n kube-system describe pods
-          kubectl -n prometheus get pods
-          kubectl -n k8sprom-patch-system describe pods
-          kubectl -n k8sprom-patch-system get all
-          kubectl -n k8sprom-patch-system logs deploy/k8stcpmap
-          kubectl -n default get prometheuspatchrules -o yaml
-          kubectl -n podinfo get all
-          kubectl -n ingress-nginx get all
-          kubectl -n ingress-nginx get cm -o yaml
+          kubectl -n k8stcpmap-system describe pods
+          kubectl -n k8stcpmap-system get all
+          kubectl -n k8stcpmap-system logs deploy/k8stcpmap-controller
+          kubectl -n k8stcpmap-system get tcpmapping -o yaml

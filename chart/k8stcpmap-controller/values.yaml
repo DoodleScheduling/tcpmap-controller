@@ -84,6 +84,8 @@ securityContext:
   capabilities:
     drop: ["all"]
   readOnlyRootFilesystem: true
+
+podSecurityContext:
   runAsGroup: 10000
   runAsNonRoot: true
   runAsUser: 10000
@@ -102,11 +104,6 @@ clusterRBAC:
   # By default the controller is granted full admin permsission on your cluster!
   # If you want to avoid this you may disable this flag and create individual bindings.
   fullAdmin: true
-
-# Creates a PodSecurityPolicy and the role/rolebinding
-# allowing the serviceaccount to use it
-podSecurityPolicy:
-  enabled: false
 
 # Prometheus operator PodMonitor
 podMonitor:
@@ -131,5 +128,19 @@ prometheusRule:
 
 kubeRBACProxy:
   enabled: true
+  image: quay.io/brancz/kube-rbac-proxy:v0.14.2
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["all"]
+    readOnlyRootFilesystem: true
+
+  resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 5m
+  #   memory: 64Mi
 
 tolerations: []
