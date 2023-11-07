@@ -10,12 +10,15 @@ permissions:
   packages: write # needed for ghcr access
 
 jobs:
-  build:
-    name: Build
+  release:
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
+        with:
+          egress-policy: audit
       - name: Checkout code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
         with:
           fetch-depth: 0
       - uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
@@ -38,3 +41,41 @@ jobs:
           args: release --rm-dist --skip-validate
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-chart:
+    runs-on: ubuntu-latest
+    needs:
+    - release
+    permissions:
+      packages: write # Needed to publish chart to ghcr.io
+      id-token: write # Needed for keyless signing
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 #v3.5
+
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@11086d25041f77fe8fe7b9ea4e48e3b9192b8f19 # v3.1.2
+
+      - name: Login to Github Container Registry using helm
+        run: echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.actor }} --password-stdin
+
+      - name: Package helm charts
+        run: |
+          packVersion=$(echo "${{ github.ref_name }}" | sed 's/^v//g')
+          helm package chart/tcpmap-controller -d chart --version=$packVersion --app-version=${{ github.ref_name }}
+      - name: Publish helm charts to Github Container Registry
+        run: |
+          repository=$(echo "${{ github.repository_owner }}" | tr [:upper:] [:lower:])
+          helm push ${{ github.workspace }}/chart/tcpmap-controller-*.tgz oci://ghcr.io/$repository/charts |& tee .digest
+          cosign login --username ${GITHUB_ACTOR} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          cosign sign --yes ghcr.io/$repository/charts/tcpmap-controller@$(cat .digest | awk -F "[, ]+" '/Digest/{print $NF}')

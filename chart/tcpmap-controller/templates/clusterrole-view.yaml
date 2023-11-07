@@ -2,14 +2,13 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "k8stcpmap-controller.fullname" . }}-edit
+  name: {{ template "tcpmap-controller.fullname" . }}-view
   labels:
-    app.kubernetes.io/name: {{ include "k8stcpmap-controller.name" . }}
+    app.kubernetes.io/name: {{ include "tcpmap-controller.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "k8stcpmap-controller.chart" . }}
-    rbac.authorization.k8s.io/aggregate-to-edit: "true"
-    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+    helm.sh/chart: {{ include "tcpmap-controller.chart" . }}
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
   annotations:
     {{- toYaml .Values.annotations | nindent 4 }}
 rules:
@@ -18,12 +17,8 @@ rules:
   resources:
   - tcpingressmappings
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
 - apiGroups:
   - "networking.infra.doodle.com"

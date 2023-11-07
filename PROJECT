@@ -1,8 +1,8 @@
 domain: doodle.com
 layout:
 - go.kubebuilder.io/v3
-projectName: k8stcpmap-controller
-repo: github.com/doodlescheduling/k8stcpmap-controller
+projectName: tcpmap-controller
+repo: github.com/doodlescheduling/tcpmap-controller
 resources:
 - api:
     crdVersion: v1
@@ -11,7 +11,7 @@ resources:
   domain: doodle.com
   group: networking.infra.doodle.com
   kind: TCPIngressMapping
-  path: github.com/doodlescheduling/k8stcpmap-controller/api/v1beta1
+  path: github.com/doodlescheduling/tcpmap-controller/api/v1beta1
   version: v1beta1
 version: "3"
 

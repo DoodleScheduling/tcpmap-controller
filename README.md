@@ -1,13 +1,13 @@
-# k8stcpmap-controller
+# tcpmap-controller
 
-[![release](https://img.shields.io/github/release/DoodleScheduling/k8stcpmap-controller/all.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/releases)
-[![release](https://github.com/doodlescheduling/k8stcpmap-controller/actions/workflows/release.yaml/badge.svg)](https://github.com/doodlescheduling/k8stcpmap-controller/actions/workflows/release.yaml)
-[![report](https://goreportcard.com/badge/github.com/DoodleScheduling/k8stcpmap-controller)](https://goreportcard.com/report/github.com/DoodleScheduling/k8stcpmap-controller)
-[![Coverage Status](https://coveralls.io/repos/github/DoodleScheduling/k8stcpmap-controller/badge.svg?branch=master)](https://coveralls.io/github/DoodleScheduling/k8stcpmap-controller?branch=master)
-[![license](https://img.shields.io/github/license/DoodleScheduling/k8stcpmap-controller.svg)](https://github.com/DoodleScheduling/k8stcpmap-controller/blob/master/LICENSE)
+[![release](https://img.shields.io/github/release/DoodleScheduling/tcpmap-controller/all.svg)](https://github.com/DoodleScheduling/tcpmap-controller/releases)
+[![release](https://github.com/doodlescheduling/tcpmap-controller/actions/workflows/release.yaml/badge.svg)](https://github.com/doodlescheduling/tcpmap-controller/actions/workflows/release.yaml)
+[![report](https://goreportcard.com/badge/github.com/DoodleScheduling/tcpmap-controller)](https://goreportcard.com/report/github.com/DoodleScheduling/tcpmap-controller)
+[![Coverage Status](https://coveralls.io/repos/github/DoodleScheduling/tcpmap-controller/badge.svg?branch=master)](https://coveralls.io/github/DoodleScheduling/tcpmap-controller?branch=master)
+[![license](https://img.shields.io/github/license/DoodleScheduling/tcpmap-controller.svg)](https://github.com/DoodleScheduling/tcpmap-controller/blob/master/LICENSE)
 
 
-The k8stcpmap-controller can automatically bind kubernetes services to the nginx ingress controller tcp proxy.
+The tcpmap-controller can automatically bind kubernetes services to the nginx ingress controller tcp proxy.
 Using a resource named TCPIngressMapping you can define which service and what port should be proxied through the nginx ingress controller.
 The controller automatically elects a free port which will be exposed on nginx as well as the nginx front service.
 
@@ -72,7 +72,7 @@ spec:
 
 ### Helm
 
-Please see [chart/k8stcpmap-controller](https://github.com/DoodleScheduling/k8stcpmap-controller/tree/master/chart/k8stcpmap-controller) for the helm chart docs.
+Please see [chart/tcpmap-controller](https://github.com/DoodleScheduling/tcpmap-controller/tree/master/chart/tcpmap-controller) for the helm chart docs.
 
 ### Manifests/kustomize
 
