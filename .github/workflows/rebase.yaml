@@ -11,11 +11,15 @@ jobs:
     if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/rebase') && (github.event.comment.author_association == 'CONTRIBUTOR' || github.event.comment.author_association == 'MEMBER' || github.event.comment.author_association == 'OWNER')
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@1b05615854632b887b69ae1be8cbefe72d3ae423 # v2.6.0
+        with:
+          egress-policy: audit    
       - name: Checkout the latest code
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b #v3
         with:
           fetch-depth: 0
       - name: Automatic Rebase
         uses: cirrus-actions/rebase@b87d48154a87a85666003575337e27b8cd65f691 #1.8
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}

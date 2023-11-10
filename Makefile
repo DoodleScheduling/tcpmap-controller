@@ -1,8 +1,8 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= k8stcpmap-controller:latest
+IMG ?= tcpmap-controller:latest
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
-ENVTEST_K8S_VERSION = 1.23
+ENVTEST_K8S_VERSION = 1.27
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -111,7 +111,7 @@ uninstall: manifests kustomize ## Uninstall CRDs from the K8s cluster specified 
 
 .PHONY: deploy
 deploy: manifests kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
-	cd config/base/manager && $(KUSTOMIZE) edit set image ghcr.io/doodlescheduling/k8stcpmap-controller=${IMG}
+	cd config/base/manager && $(KUSTOMIZE) edit set image ghcr.io/doodlescheduling/tcpmap-controller=${IMG}
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
 .PHONY: undeploy
@@ -122,18 +122,13 @@ TEST_PROFILE=nginx-ingress-1.7.0
 CLUSTER=kind
 
 .PHONY: kind-test
-kind-test: docker-build ## Deploy including test
+kind-test: ## Deploy including test
 	kustomize build config/base/crd | kubectl --context kind-${CLUSTER} apply -f -	
+	kubectl --context kind-${CLUSTER} -n tcpmap-system delete pods --all
 	kind load docker-image ${IMG} --name ${CLUSTER}
 	kustomize build config/tests/cases/${TEST_PROFILE} --enable-helm | kubectl --context kind-${CLUSTER} apply -f -	
-	kubectl --context kind-${CLUSTER} -n k8stcpmap-system delete pods --all
-	kubectl --context kind-${CLUSTER} -n k8stcpmap-system wait --for=condition=Ready pods --all -l app.kubernetes.io/component!=admission-webhook --timeout=3m
-	electedPort=$$(kubectl -n k8stcpmap-system get tcpingressmappings/podinfo -o jsonpath='{.status.electedPort}'); \
-	kubectl -n k8stcpmap-system port-forward svc/ingress-nginx-controller 8099:$$electedPort & \
-	pid=$$!; \
-	sleep 10; \
-	curl --haproxy-protocol -v --fail http://localhost:8099; \
-	kill $$pid
+	kubectl --context kind-${CLUSTER} -n tcpmap-system wait --for=condition=Ready pods -l control-plane=controller-manager -l app.kubernetes.io/managed-by!=Helm,verify!=yes --timeout=3m
+	kubectl --context kind-${CLUSTER} -n tcpmap-system wait --for=jsonpath='{.status.conditions[1].reason}'=PodCompleted pods -l app.kubernetes.io/managed-by!=Helm,verify=yes --timeout=3m
 
 CONTROLLER_GEN = $(GOBIN)/controller-gen
 .PHONY: controller-gen

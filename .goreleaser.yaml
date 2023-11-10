@@ -1,4 +1,4 @@
-project_name: k8stcpmap-controller
+project_name: tcpmap-controller
 
 builds:
 - id: manager

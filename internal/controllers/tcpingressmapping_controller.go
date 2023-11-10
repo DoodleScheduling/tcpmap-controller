@@ -35,9 +35,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 
-	v1beta1 "github.com/DoodleScheduling/k8stcpmap-controller/api/v1beta1"
+	v1beta1 "github.com/DoodleScheduling/tcpmap-controller/api/v1beta1"
 )
 
 // +kubebuilder:rbac:groups=networking.infra.doodle.com,resources=tcpingressmappings,verbs=get;list;watch;create;update;patch;delete
@@ -57,12 +56,14 @@ var (
 )
 
 type TCPIngressMappingReconciler struct {
-	client.Client
+	MinPort         int32
+	MaxPort         int32
 	Log             logr.Logger
 	Scheme          *runtime.Scheme
 	Recorder        record.EventRecorder
 	TCPConfigMap    string
 	FrontendService string
+	client.Client
 }
 
 type TCPIngressMappingReconcilerOptions struct {
@@ -87,20 +88,19 @@ func (r *TCPIngressMappingReconciler) SetupWithManager(mgr ctrl.Manager, opts TC
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&v1beta1.TCPIngressMapping{}).
 		Watches(
-			&source.Kind{Type: &v1.Service{}},
+			&v1.Service{},
 			handler.EnqueueRequestsFromMapFunc(r.requestsForServiceChange),
 		).
 		WithOptions(controller.Options{MaxConcurrentReconciles: opts.MaxConcurrentReconciles}).
 		Complete(r)
 }
 
-func (r *TCPIngressMappingReconciler) requestsForServiceChange(o client.Object) []reconcile.Request {
+func (r *TCPIngressMappingReconciler) requestsForServiceChange(ctx context.Context, o client.Object) []reconcile.Request {
 	s, ok := o.(*v1.Service)
 	if !ok {
 		panic(fmt.Sprintf("expected a Service, got %T", o))
 	}
 
-	ctx := context.Background()
 	var list v1beta1.TCPIngressMappingList
 	if err := r.List(ctx, &list, client.MatchingFields{
 		serviceIndex: objectKey(s).String(),
@@ -266,7 +266,7 @@ func (r *TCPIngressMappingReconciler) reconcile(ctx context.Context, tcpmap v1be
 
 		logger.Info("use port pool", "ports", ports, "elected-port", tcpmap.Status.ElectedPort)
 
-		electedPort = findPort(ports)
+		electedPort = r.findPort(ports)
 		newlyElected = electedPort
 
 		if electedPort == 0 {
@@ -362,9 +362,19 @@ func getBackendPort(svc v1.Service, port intstr.IntOrString) (int32, error) {
 	return 0, ErrPortNotFound
 }
 
-func findPort(ports []int32) int32 {
+func (r *TCPIngressMappingReconciler) findPort(ports []int32) int32 {
+	minPort := r.MinPort
+	if minPort == 0 {
+		minPort = 1025
+	}
+
+	maxPort := r.MaxPort
+	if minPort == 0 {
+		maxPort = 65535
+	}
+
 OUTER:
-	for i := int32(1025); i <= int32(65535); i++ {
+	for i := int32(minPort); i <= int32(maxPort); i++ {
 		for _, e := range ports {
 			if e == i {
 				continue OUTER
